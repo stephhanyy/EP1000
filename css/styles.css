@@ -1,0 +1,46 @@
+@charset "UTF-8";
+/* CSS Document */
+
+body {
+	background-color: black;
+}
+
+h1 {
+	font-family: 'Press Start 2P', cursive;
+	color: white;
+}
+
+.nav-head {
+	font-family: 'Source Code Pro', monospace;
+	color: white;
+}
+
+ul {
+	font-family: 'Source Code Pro', monospace;
+	color: white;
+}
+
+p {
+	font-family: 'Source Code Pro', monospace;
+	color: white;
+}
+
+/* unvisited link */
+a:link {
+  color: white;
+}
+
+/* visited link */
+a:visited {
+  color: white;
+}
+
+/* mouse over link */
+a:hover {
+  color: hotpink;
+}
+
+/* selected link */
+a:active {
+  color: green;
+}
