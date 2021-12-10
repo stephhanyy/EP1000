@@ -1,46 +1,105 @@
 @charset "UTF-8";
 /* CSS Document */
 
+* {
+	margin: 0;
+	padding: 0;
+}
 body {
-	background-color: black;
+	text-align: center;
 }
-
-h1 {
+.wrapper {
+	width: 1170px;
+	margin: 0 auto;
+}
+header {
+	height: 100px;
+	background: white;
+	width: 100%;
+	z-index: 10;
+	position: fixed;
+}
+.logo {
+	width: 40%;
+	float: left;
+	line-height: 100px;
+}
+.logo a {
+	text-decoration: none;
+	font-size: 30px;
 	font-family: 'Press Start 2P', cursive;
-	color: white;
+	color: black;
+	letter-spacing: 5px;
+}
+nav {
+	float: right;
+	line-height: 100px;
+}
+nav a {
+	text-decoration: none;
+	font-family:  'Source Code Pro', monospace;
+	letter-spacing: 4px;
+	font-size: 20px;
+	margin: 0 10px;
+	color: black;
 }
 
-.nav-head {
-	font-family: 'Source Code Pro', monospace;
-	color: white;
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 250px;
+  z-index: 1;
+  line-height: 50px;
+  text-align: left;
+
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+a:link, a:visited {
+  color: black;
+}
+
+a:hover {
+  color: red;
+}
+
+.content-area {
+	width: 100%;
+	position: relative;
+	top: 100px;
+	background: white;
+	height: 1500px;
+}
+.content-area h2 {
+	font-family:  'Press Start 2P', cursive;
+	letter-spacing: 4px;
+	padding-top: 30px;
+	font-size: 20px;
+	margin: 0;
+	text-align: left;
+}
+.content-area p {
+	padding: 2% 0px;
+	font-family:  'Source Code Pro', monospace;
+	line-height: 30px;
+	text-align: left;
 }
 
 ul {
-	font-family: 'Source Code Pro', monospace;
-	color: white;
+	font-family:  'Source Code Pro', monospace;
+	text-align: left;
+	margin-left: 20px;
 }
 
-p {
-	font-family: 'Source Code Pro', monospace;
-	color: white;
-}
-
-/* unvisited link */
-a:link {
-  color: white;
-}
-
-/* visited link */
-a:visited {
-  color: white;
-}
-
-/* mouse over link */
-a:hover {
-  color: hotpink;
-}
-
-/* selected link */
-a:active {
-  color: green;
+table p {
+	margin: 30px;
 }
