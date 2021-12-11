@@ -37,10 +37,20 @@
 			<div class="wrapper">
 				<h2>css</h2>
 				<br>
+				<p>
+					as we made our html websites last lesson, all we needed to complete a basic site is the css. we were directed to use a tutorial by jw anderson. the link to my jw anderson site is <a href="../jwsite.html">here</a>.
+				</p>
+				<p>
+					as you can tell from this current site, i did not use the framework given. i'm a design student learning uiux so i find it really ugly and don't want to use it LOL. instead, my framework is actually taken from <a href="https://www.divinectorweb.com/2020/11/fixed-header-with-html-and-css.html">this</a> site. the changes i made to it were adding a dropdown for my projects and removing the banner as i didn't have one. 
+				</p>
+				<p>
+					regardless, here is the html and css code for my jw site:
+				</p>
 				<table>
-					<td>
-						<pre>
-							<code>
+					<tr>
+						<td>
+							<pre>
+								<code>
 &lt!DOCTYPE html&gt
 &lthtml&gt
 &lthead&gt
@@ -77,9 +87,79 @@
 
 &lt/body&gt
 &lt/html&gt
-							</code>
-						</pre>
-					</td>
+								</code>
+							</pre>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<pre>
+								<code>
+@charset "UTF-8";
+/* CSS Document */
+
+body {
+	background-color: #eee;
+	font-family: Helvetica, Arial, sans-serif;
+}
+
+a {
+	text-decoration: none;
+	color: red;
+}
+
+h1, h2, h3 {
+	margin: 0;
+}
+
+#container {
+	background-color: white;
+	width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#header {
+	background-color: #66CCFF;
+	color: white;
+	text-align: center;
+}
+
+#content {
+	padding: 10px;
+}
+
+#nav {
+	width: 180px;
+	float: left;
+}
+
+#nav ul {
+	list-style-type: none;
+	padding: 0;
+}
+
+#nav .selected{
+	font-weight: bold;
+}
+
+#main {
+	width: 600px;
+	float: right;
+	color: black;
+}
+
+#footer {
+	clear: both;
+	padding: 10px;
+	background-color: #999999;
+	color: #FFFFFF;
+	text-align: right;
+}
+								</code>
+							</pre>
+						</td>
+					</tr>
 				</table>
 	
 
