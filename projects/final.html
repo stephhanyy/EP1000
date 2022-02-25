@@ -39,8 +39,9 @@
 				<h2>final project</h2>
 				<br>
 				<p>the last graded assignment we have of the year is of us creating a project that involves everything we have learn in class the past semester. the project needs to be made with a microcontroller, input and output devices, laser cut housing and 3d printed components.</p>
+		
 
-				<h2>my project idea</h2>
+				<h2 id="project idea">my project idea</h2>
 				<p>
 				initially i wanted to make a plant hydration detector that would sense whether my mom's community garden vegetables needed to be watered and send her a push notification on her phone to go down and water her plants. but i realised that the arduino would have to be wifi enabled to send notifications and the community garden didn't have wifi lol, so i scrapped the idea.
 				</p>
@@ -51,16 +52,620 @@
 
 				<p>this is a diagram of how my project would work:</p>
 				<table>
-					<td>
-						sketch still being inked - come back later !
-					</td>
+					<tr>
+						<td>
+								<img src="../imgs/stage 1.jpg" height="300px">
+								<img src="../imgs/stage 2.jpg" height="300px">
+								<img src="../imgs/stage 3.jpg"height="300px">
+						</td>
+					</tr>
 				</table>
-				<p>
-				
-				</p>
+
+				<p>and the parts</p>
+				<table>
+					<tr>
+						<td>
+								<img src="../imgs/parts.jpg" height="400px">
+						</td>
+					</tr>
+				</table>
 
 				<p>this is my project description and the parts i will need:</p>
 				<embed src="../EP1000_project_description.pdf" type="application/pdf" width="100%" height="600px" />
+
+				<h2 id="circuit and soldering">circuit and soldering</h2>
+
+				<p>My circuit is split into 2 parts; one with the dot matrix display and button, and one with the buzzer, red LED, metal tweezers and metal rings. They are in a parallel circuit as the way the later one works is by having an incomplete circuit be completed when the metal parts touch each other, and I wanted the dot matrix to be powered the entire time. Additionally, I tried to make them separately before connecting them in a parallel circuit. This is because any issues with wiring are clearer when the circuit is deconstructed step by step.</p>
+
+				<p>I wasn’t a physics student and worked almost exclusively with micro:bit for years so my knowledge on wiring is very limited. This is how I tried to draw out my circuit (circuit drawing mine.jpeg). Thankfully, my brother studied mechatronics so I enlisted his help in translating my terribly drawn circuit into one for Arduino (circuit drawing).</p>
+
+				<p>For the buzzer and LED part, I was advised to test it out on a single body part first. Choosing the heart, I laser cut out a heart shape on 2 layers of 3mm wood which was glued onto an uncut layer. I wrapped the inside of the heart with aluminium foil that was connected to GND and taped a wire onto my tweezer that was connected to 5V. Between those 2 wires on the breadboard were an LED, a 10ohm(?) resistor and an active buzzer.</p>
+
+				<p>In my final version, I had 8 different pieces of aluminium foil for 8 compartments which all had to be connected to GND so I stripped the ends of 8 wires and soldered them all into one main wire. This is probably not the safest way of doing it but hey, it ended up working well. I also tried to solder the other end of the wire to the foil rings but the solder would not stick so I just taped them onto it.</p>
+
+				<p>Since that was done, I moved onto the LED matrix part. This was relatively simple with the matrix being wired into GND, VCC, P12, P11, P10 for DIN, CS, CLK, and the button being wired into P3 and GND.</p>
+
+				<p>Here is the inital wiring of my full project, combining both parts.</p>
+
+				<p>Unfortunately, I kept running into problems with the LED matrixes available in class. The first one I received was unsoldered, the second one just would not turn on, and the third on had a few broken LEDs. I eventually got fed up with them so I decided to switch to using an LCD screen which would just write out the names of the parts. Thankfully the LCD was connected to a I2C device so I only had to wire it into P4,P5 which are the SDA and SCL of the Nano, and into VCC and GND.</p>
+
+				<p>There wasnt any 5V VC power jack plugs in my house so I wasn’t able to actually test if it worked before my presentation.  I really wanted it to stay neat so I taped wires of the same components together.</p>
+
+				<p>My final circuit:</p>
+
+				<h2 id="code">code</h2>
+
+				<p>For the dot matrix, I designed an 8x8 design for each body piece. </p>
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/dot matrix.png" height="300px"> 
+						</td>
+					</tr>
+				</table>
+
+				<p>Using this <a href="https://www.riyas.org/2013/12/online-led-matrix-font-generator-with.html">Online led matrix binary and hex codes generator</a>, I was able to generate hex codes for the led displays I made for each body piece.</p>
+
+				<table>
+					<tr>
+						<td>
+							<pre>
+								<code>
+byte wrench[8]= {0x28,0x38,0x10,0x10,0x10,0x10,0x38,0x28};
+byte butterfly[8]= {0x81,0xC3,0xE7,0x7E,0x3C,0x7E,0x66,0x81};
+byte pencil[8]= {0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01};
+byte bone[8]= {0x00,0x00,0x00,0x42,0x3C,0x42,0x00,0x00};
+byte heart[8]= {0x00,0x66,0xEF,0xF7,0x6E,0x3C,0x18,0x00};
+byte wishbone[8]= {0x08,0x08,0x08,0x14,0x22,0x22,0x22,0x22};
+byte bucket[8]= {0x18,0x24,0x42,0x7E,0x7E,0x7E,0x3C,0x3C};
+byte horse[8]= {0x04,0x07,0x0E,0x7C,0xFE,0xEE,0x42,0x41};
+byte icecream[8]= {0x08,0x18,0x3C,0x7E,0x3C,0x3C,0x18,0x18};
+byte smile[8] = {0x3C,0x42,0xA5,0x81,0xA5,0x99,0x42,0x3C};
+								</code>
+							</pre>
+						</td>
+					</tr>
+				</table>
+				<p>Adapting the traffic light code from a previous lesson, I created 10 different states for each display variation. When the button was pushed, a new state would be shown. Here is the rough code I did that probably does not work. </p>
+					<table>
+					<tr>
+						<td>
+							<pre>
+								<code>
+#include <LedControl.h>
+
+#define SW 3
+#define DIN 12
+#define CS 11
+#define CLK 10
+
+byte wrench[8]= {0x28,0x38,0x10,0x10,0x10,0x10,0x38,0x28};
+byte butterfly[8]= {0x81,0xC3,0xE7,0x7E,0x3C,0x7E,0x66,0x81};
+byte pencil[8]= {0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01};
+byte bone[8]= {0x00,0x00,0x00,0x42,0x3C,0x42,0x00,0x00};
+byte heart[8]= {0x00,0x66,0xEF,0xF7,0x6E,0x3C,0x18,0x00};
+byte wishbone[8]= {0x08,0x08,0x08,0x14,0x22,0x22,0x22,0x22};
+byte bucket[8]= {0x18,0x24,0x42,0x7E,0x7E,0x7E,0x3C,0x3C};
+byte horse[8]= {0x04,0x07,0x0E,0x7C,0xFE,0xEE,0x42,0x41};
+byte icecream[8]= {0x08,0x18,0x3C,0x7E,0x3C,0x3C,0x18,0x18};
+byte smile[8] = {0x3C,0x42,0xA5,0x81,0xA5,0x99,0x42,0x3C}
+
+LedControl lc=LedControl(DIN,CLK,CS,0);
+
+int state = 0;
+/* 
+  state 0 - start/smile
+    1 - ice cream
+    2 - wishbone
+    3 - heart
+    4 - bone
+    5 - butterfly
+    6 - pencil
+    7 - horse
+    8 - bucket
+    9 - wrench
+*/
+
+int swstate = HIGH;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Serial.println("start");
+  // setup for basics  
+  pinMode(sw,INPUT);
+  //  setup for matrix
+  lc.shutdown(0,false);       //The MAX72XX is in power-saving mode on startup
+  lc.setIntensity(0,15);      // Set the brightness to maximum value
+  lc.clearDisplay(0);         // and clear the display
+}
+
+// functions 
+
+void decode(int = s) {
+  if (s == 0) {
+    //state 0 
+    printByte(smile);
+    return
+  }
+    if (s == 1) {
+    //state 1 
+    printByte(icecream);
+    return
+  }
+    if (s == 2) {
+    //state 2 
+    printByte(wishbone);
+    return
+  }
+    if (s == 3) {
+    //state 3 
+    printByte(heart);;
+    return
+  }
+    if (s == 4) {
+    //state 4 
+    printByte(bone);
+    return
+  }
+    if (s == 5) {
+    //state 5
+    printByte(butterfly);
+    return
+  }
+    if (s == 6) {
+    //state 6 
+    printByte(pencil);
+    return
+  }
+    if (s == 7) {
+    //state 7 
+    printByte(horse);
+    return
+  }
+    if (s == 8) {
+    //state 8 
+    printByte(bucket);
+    return
+  }
+    if (s == 9) {
+    //state 9 
+    printByte(wrench);
+    return
+  }
+}
+
+//checks the switch, if switch is pressed and released
+bool checkSW(){
+  int sw = digitalRead(SW);
+  if (swstate == HIGH){
+    if (swstate == LOW){
+      //switch returning from pressed state 
+      swstate = HIGH;
+      return True;
+    }
+    else {
+      // switch not pressed at all
+    }
+  }
+  else {
+    // switch was pressed
+    swstate = LOW; 
+    delay(10);
+    return False;
+  }
+}
+
+void loop() {
+  // check whether sw is pressed
+  bool isPressed = checkSW();
+  if (isPressed) {
+    state = random(1, 9)
+    //execute program based on state
+    decode(state);
+  }
+  else {
+    // not pressed, do nothing
+  }
+}
+
+// function to print on matrix
+void printByte(byte character [])
+{
+  int i = 0;
+  for(i=0;i<8;i++)
+  {
+    lc.setRow(0,i,character[i]);
+  }
+}
+
+								</code>
+							</pre>
+						</td>
+					</tr>
+				</table>
+				<p>The initial idea was to randomise which part was shown on the display by adding a random(0,8) when the button was pushed. One issue with this is that there is a possibility of repeating parts even when the part has already been removed. Looking online, most of the solutions for this was the Fisher-Yates shuffle algorithm. The algorithm puts all the elements into a hat and continually determines the next element by randomly drawing an element from the hat until no elements remain. How I was thinking of implementing it into my code was by putting my different strings of text into an array and shuffling another array of the numbers 0 to 8, the order of the numbers in the second array would call the corresponding string in the previous sequence. However, even though I was able to create a code that printed a shuffled sequence number by number, adapted from <a href="https://forum.arduino.cc/t/random-number-in-array/912765/2">this website</a>.</p>
+				<table>
+					<tr>
+						<td>
+							<pre>
+								<code>
+const int SIZE = 10;
+int array[SIZE] ;
+
+// Fisher–Yates shuffle
+void shuffleArray(int* a, const size_t size) {
+  for (size_t i = size - 1; i > 0; --i) {
+    size_t r = random(0, i + 1); // generate rand numbers from 0 to i
+    int tmpSwap = a[i];
+    a[i] = a[r];
+    a[r] = tmpSwap;
+  }
+}
+
+void printArray(const int* a, const size_t size) {
+  for (size_t i = 0; i < size; i++) {
+    Serial.print(a[i]); Serial.write(' ');
+  }
+  Serial.println();
+  Serial.print(a[0]); 
+  Serial.print(a[1]); 
+  Serial.print(a[2]); 
+  Serial.print(a[3]); 
+  Serial.print(a[4]); 
+  Serial.print(a[5]); 
+  Serial.print(a[6]); 
+  Serial.print(a[7]); 
+  Serial.print(a[8]); 
+  Serial.print(a[9]);
+}
+
+void setup() {
+  Serial.begin(115200); Serial.println();
+
+  // randomize
+  randomSeed(analogRead(A0));
+
+  // fill the array in sequential order
+  for (int i = 0; i < SIZE; i++) array[i] = i;
+
+  // shuffle the array
+  shuffleArray(array, SIZE);
+  printArray(array, SIZE);
+}
+
+void loop() {}
+
+								</code>
+							</pre>
+						</td>
+					</tr>
+				</table>
+				<p>I didn’t know how to use the values from that sequence to call values from another array that was in a separate void. In the end, I decided on just using a set sequence of text to display as I ran out of time to figure the code out and found nothing online on how to do it. Until now, I still don’t know if that is even possible to do in processing.</p>
+
+				<p>Here is my final code adapted for the LCD screen. Download <a href="../files/final operation game code.ino" download>here</a></p>
+				<table>
+					<tr>
+						<td>
+							<pre>
+								<code>
+#include <LiquidCrystal_I2C.h>
+#define BUTTON_PIN 6
+
+//define I2C address......
+LiquidCrystal_I2C lcd(0x27,16,2);
+/* 
+  state 0 - start
+    1 - wrench
+    2 - wishbone
+    3 - heart
+    4 - bone
+    5 - butterfly
+    6 - pencil
+    7 - horse
+    8 - bucket
+*/
+
+void setup() {
+  pinMode(BUTTON_PIN, INPUT);
+  Serial.begin(9600);
+  Serial.println("start");
+  lcd.init();
+  lcd.clear();
+  lcd.backlight();
+  lcd.setCursor(2,0);
+  lcd.print("Press button");
+
+  lcd.setCursor(4,1);
+  lcd.print("to start.");
+}
+
+// functions 
+
+int state = 0;
+
+void decode(int = state) {
+  if (state == 0) {
+    //state 0 
+    lcd.clear();  
+    lcd.setCursor(3,0);
+    lcd.print("Thank you");
+
+    lcd.setCursor(2,1);
+    lcd.print("for playing.");
+    return;
+  }  
+  if (state == 1) {
+    //state 0 
+    lcd.clear();  
+    lcd.setCursor(1,0);
+    lcd.print("Please remove:");
+
+    lcd.setCursor(1,1);
+    lcd.print("Wrenched ankle");
+
+    return;
+  }
+  if (state == 2) {
+    //state 0 
+    lcd.clear();  
+    lcd.setCursor(1,0);
+    lcd.print("Please remove:");
+
+    lcd.setCursor(3,1);
+    lcd.print("Wish Bone");
+
+    return;
+  }
+  if (state == 3) {
+    //state 1 
+    lcd.clear();  
+    lcd.setCursor(1,0);
+    lcd.print("Please remove:");
+
+    lcd.setCursor(2,1);
+    lcd.print("Broken heart");
+    return;
+  }  
+  if (state == 4) {
+    //state 2
+    lcd.clear();  
+    lcd.setCursor(1,0);
+    lcd.print("Please remove:");
+
+    lcd.setCursor(3,1);
+    lcd.print("Funny Bone");
+
+    return;
+  }
+  if (state == 5) {
+    //state 2
+    lcd.clear();  
+    lcd.setCursor(1,0);
+    lcd.print("Please remove:");
+
+    lcd.setCursor(2,1);
+    lcd.print("Butterflies");
+    delay(1000);
+    lcd.setCursor(0,1);
+    lcd.print("              ");
+    delay(500);
+    lcd.setCursor(3,1);
+    lcd.print("in Stomach");
+
+
+    return;
+  }
+  if (state == 6) {
+    //state 2
+    lcd.clear();  
+    lcd.setCursor(1,0);
+    lcd.print("Please remove:");
+
+    lcd.setCursor(1,1);
+    lcd.print("Writer's Cramp");
+
+    return;
+  }
+  if (state == 7) {
+    //state 2
+    lcd.clear();  
+    lcd.setCursor(1,0);
+    lcd.print("Please remove:");
+
+    lcd.setCursor(1,1);
+    lcd.print("Charley Horse");
+
+    return;
+  }
+  if (state == 8) {
+    //state 2
+    lcd.clear();  
+    lcd.setCursor(1,0);
+    lcd.print("Please remove:");
+
+    lcd.setCursor(4,1);
+    lcd.print("Water on");
+    delay(1000);
+    lcd.setCursor(0,1);
+    lcd.print("              ");
+    delay(500);
+    lcd.setCursor(4,1);
+    lcd.print("the Knee");
+
+    return;
+  }
+}
+
+void loop() {
+  if (digitalRead(BUTTON_PIN) == LOW) {
+    state = state+1;
+    if (state >= 9){
+      state = 0;
+    }
+    decode(state);
+    Serial.println("button pressed");
+    delay(1000); // helps with button bouncing
+
+    delay(100);
+  }
+  else {
+  }
+
+}		</code>
+							</pre>
+						</td>
+					</tr>
+				</table>
+
+				<h2 id="3d printing">3D printing</h2>
+				<p>For the body part pieces, I found 3d models already available online which were very accurate to the original version and saved me quite a lot of time if I had tried to make them myself.</p> 
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/piece google.png" height="300px"> 
+						</td>
+					</tr>
+				</table>
+
+				<p>I would’ve still liked to create my own versions but I was too busy with submissions so I took the easy way out. This is the <a href="https://www.myminifactory.com/object/3d-print-replacement-operation-pieces-80228">model</a> that I used, all credits to Chloe Peters, the creator of this. </p>
+
+				<p>Now I had to make the insert the pieces would rest in. By making outlines of the pieces, I used Adobe Illustrator to give offset the outline by 2mm to give the tweezers just enough space the get in and pick up the pieces without hitting the metal.</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/offset path.png" height="600px"> 
+						</td>
+					</tr>
+				</table>
+
+				<p>Here is the insert I made, click the image to download:</p>
+
+				<table>
+					<tr>
+						<td>
+							<a href="../files/final insert v1.stl" download>
+							  	<img src="../imgs/insert bottom.png" height="200px">
+							  	<img src="../imgs/insert top.png" height="200px">
+							</a>
+						</td>
+					</tr>
+				</table>
+				
+
+				<p>The walls of the insert were 1mm thick to reduce the weight hanging onto a thin sheet of wood on the top panel, and to reduce printing time. I also added holes for screws for the insert to be screwed into place onto the top panel. My first few prints ended up mistakes as I forgot to mirror the design before extruding the recesses. The printers at the MAD factory in T21 also managed to mess up the scale for some reason so it ended up being way too small to use and I had to reprint at T14.</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/first insert.jpeg" height="600px"> 
+						</td>
+					</tr>
+				</table>
+
+				<p>Printing process photos:</p>
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/currently print.jpeg" height="600px"> 
+							<img src="../imgs/finished print.jpeg" height="600px"> 
+						</td>
+					</tr>
+				</table>
+
+				<p>These are the final pieces I 3d printed</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/insert.jpeg" height="600px"> 
+							<img src="../imgs/pieces.jpeg" height="600px"> 
+						</td>
+					</tr>
+				</table>
+
+				<h2 id="laser cutting">laser cutting</h2>
+				<p>As I am a big art nerd, the human body design on the box is actually Leonardo da Vinci’s <a href="https://www.sciencephoto.com/media/880298/view/leonardo-nude-man-from-the-front">A Nude Man from the Front</a> drawing.</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/davinci.jpeg" height="600px">
+						</td>
+					</tr>
+				</table>
+
+				<p>Using Adobe Illustrators image trace function, I easily made a vector design of the image to make it cleaner and clearer when engraved. 
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/image trace.png" height="600px">
+						</td>
+					</tr>
+				</table>
+
+				<p>The first box I made was directly in Illustrator without a 3d model in Fusion360 first (cuz i was lazy lol) and had cutouts for the led matrix and button, and had small speaker holes for the buzzer. 
+				It looked like this:</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/first design.png" height="300px">
+							<img src="../imgs/first print.jpeg" height="300px">
+						</td>
+					</tr>
+				</table>
+
+				<p>I made it 15cm x 12cm so the box wouldn’t be too big and bulky but I honestly regretted making it so small as the components were forced too close to each other to be wired safely. Since the holes for the pieces cut out most of the body design, I ended up scaling the design and removing some parts to space out the rest more evenly. </p>
+
+				
+
+				<p>The second box I made was finally in Fusion360. All I did was change the parameters of my music box to the dimensions of the new box (yeah i was still lazy). I changed the size of the box from the previous design as I had swapped my dot matrix for an LCD. As the LCD is wide and thin, I placed it at the top of the box with the button and buzzer right next to the design, giving them more space for wiring. What else I added to the box was a 3mm diameter hole for the tweezers wire to insert through and holes for the DC power jack and power switch. In addition, I labelled each body part as now the LCD was displaying the names of the pieces. I wanted to leave in the part that allowed the top panel to flip open as I thought that would be easier to access my wiring and spare parts in the box if need be. But once I printed it out and tested the box, the two extruded side parts of the top broke off due to the weight of the components and screws attached to it. </p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/new design.png" height="300px">
+							<img src="../imgs/new box.png" height="300px">
+						</td>
+					</tr>
+				</table>
+
+				<p>This leads me to my final box. I scaled the base and left and right panels of the box from 206mm to 203mm so my 203 mm long top panel could rest directly on the front and back panels. It is held in place by the left and right panels being a tight fit, holding it together with tension. I also changed the sizes of the holes cut out for the power switch and DC power jack as they were the wrong size previously. Click <a href="../filesfinal design print.dxf">here</a> to download.
+				</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/newest design.png" height="300px">
+							<img src="../imgs/newest box.png" height="300px">
+						</td>
+					</tr>
+				</table>
+
+				<h2 id="final">final product</h2>
+				<p id="card">project ownership card</p>
+				<br>
+				<embed src="../imgs/project ownership card.pdf" type="application/pdf" width="100%" height="600px" />
+				<p>
+					
+
+				</p>
+				<p id="slide">presentation slide</p>
+				<br>
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/presentation slide-01.jpg" height="600px">
+						</td>
+					</tr>
+				</table>
+				<p id="video">video</p>
+
+
 
 </body>
 </html>
