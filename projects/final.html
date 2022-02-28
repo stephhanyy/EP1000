@@ -77,11 +77,55 @@
 
 				<p>My circuit is split into 2 parts; one with the dot matrix display and button, and one with the buzzer, red LED, metal tweezers and metal rings. They are in a parallel circuit as the way the later one works is by having an incomplete circuit be completed when the metal parts touch each other, and I wanted the dot matrix to be powered the entire time. Additionally, I tried to make them separately before connecting them in a parallel circuit. This is because any issues with wiring are clearer when the circuit is deconstructed step by step.</p>
 
-				<p>I wasn’t a physics student and worked almost exclusively with micro:bit for years so my knowledge on wiring is very limited. This is how I tried to draw out my circuit (circuit drawing mine.jpeg). Thankfully, my brother studied mechatronics so I enlisted his help in translating my terribly drawn circuit into one for Arduino (circuit drawing).</p>
+				<p>I wasn’t a physics student and worked almost exclusively with micro:bit for years so my knowledge on wiring is very limited. This is how I tried to draw out my circuit.</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/circuit drawing mine.jpg" height="300px"> 
+						</td>
+					</tr>
+				</table>
+
+				<P>Thankfully, my brother studied mechatronics so I enlisted his help in translating my terribly drawn circuit into a schematic for Arduino.</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/circuit drawing.jpg" height="500px"> 
+						</td>
+					</tr>
+				</table>
 
 				<p>For the buzzer and LED part, I was advised to test it out on a single body part first. Choosing the heart, I laser cut out a heart shape on 2 layers of 3mm wood which was glued onto an uncut layer. I wrapped the inside of the heart with aluminium foil that was connected to GND and taped a wire onto my tweezer that was connected to 5V. Between those 2 wires on the breadboard were an LED, a 10ohm(?) resistor and an active buzzer.</p>
 
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/heart demo.jpeg" height="480px"> 
+						</td>
+					</tr>
+				</table>
+				<br>
+				<table>
+					<tr>
+						<td>
+							<video width="640" height="490" controls>
+						      <source src="../imgs/heart vid.mp4" type=video/mp4>
+						    </video>
+						</td>
+					</tr>
+				</table>
+
 				<p>In my final version, I had 8 different pieces of aluminium foil for 8 compartments which all had to be connected to GND so I stripped the ends of 8 wires and soldered them all into one main wire. This is probably not the safest way of doing it but hey, it ended up working well. I also tried to solder the other end of the wire to the foil rings but the solder would not stick so I just taped them onto it.</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/solder wires.jpeg" height="500px"> 
+						</td>
+					</tr>
+				</table>
 
 				<p>Since that was done, I moved onto the LED matrix part. This was relatively simple with the matrix being wired into GND, VCC, P12, P11, P10 for DIN, CS, CLK, and the button being wired into P3 and GND.</p>
 
@@ -664,6 +708,23 @@ void loop() {
 					</tr>
 				</table>
 				<p id="video">video</p>
+				<table>
+					<tr>
+						<td>
+							<iframe width="560" height="315" src="https://www.youtube.com/embed/F0Z5UzQB4jA" title="YouTube video player" align="left" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+						</td>
+					</tr>
+				</table>
+
+				<p>
+					
+
+
+
+
+
+				</p>
+				
 
 
 
