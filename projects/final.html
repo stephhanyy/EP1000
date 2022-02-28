@@ -122,20 +122,54 @@
 				<table>
 					<tr>
 						<td>
-							<img src="../imgs/solder wires.jpeg" height="500px"> 
+							<img src="../imgs/solder wires.jpeg" height="300px"> 
+							<img src="../imgs/metal ring.jpeg" height="300px"> 
 						</td>
 					</tr>
 				</table>
 
 				<p>Since that was done, I moved onto the LED matrix part. This was relatively simple with the matrix being wired into GND, VCC, P12, P11, P10 for DIN, CS, CLK, and the button being wired into P3 and GND.</p>
 
-				<p>Here is the inital wiring of my full project, combining both parts.</p>
+				<table>
+					<tr>
+						<td>
+							<p>couldnt take a pic of this cuz it was too dark whoops</p>
+						</td>
+					</tr>
+				</table>
 
 				<p>Unfortunately, I kept running into problems with the LED matrixes available in class. The first one I received was unsoldered, the second one just would not turn on, and the third on had a few broken LEDs. I eventually got fed up with them so I decided to switch to using an LCD screen which would just write out the names of the parts. Thankfully the LCD was connected to a I2C device so I only had to wire it into P4,P5 which are the SDA and SCL of the Nano, and into VCC and GND.</p>
 
-				<p>There wasnt any 5V VC power jack plugs in my house so I wasn’t able to actually test if it worked before my presentation.  I really wanted it to stay neat so I taped wires of the same components together.</p>
+				<table>
+					<tr>
+						<td>
+							<video width="400px" controls>
+						      <source src="../imgs/lcd vid.mp4" type=video/mp4>
+						    </video>
+						</td>
+					</tr>
+				</table>
+
+				<p>There wasnt any 5V VC power jack plugs in my house so I wasn’t able to actually test if it worked before my presentation. Thankfully, kai lent me his right before my presentation and I only needed to swap the position of the VCC and GND wires as I soldered them the wrong way.  I really wanted it to stay neat so I taped wires of the same components together.</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/inside top.jpeg" height="300px"> 
+						</td>
+					</tr>
+				</table>
 
 				<p>My final circuit:</p>
+
+				<table>
+					<tr>
+						<td>
+							<img src="../imgs/inside.jpeg" height="300px"> 
+							<img src="../imgs/inside closer.jpeg" height="300px"> 
+						</td>
+					</tr>
+				</table>
 
 				<h2 id="code">code</h2>
 
